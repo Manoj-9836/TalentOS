@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/architecture.png" alt="TalentOS Architecture" width="100%">
+  <img src="[docs/assets/architecture.png](https://github.com/Manoj-9836/TalentOS/blob/main/Architecture/Architecture.png?raw=true)" alt="TalentOS Architecture" width="100%">
 </p>
 
 <h1 align="center">TalentOS – AI Recruiting Intelligence System</h1>
