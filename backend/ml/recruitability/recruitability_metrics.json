@@ -1,0 +1,12 @@
+{
+  "mae": 0.14453137546515782,
+  "rmse": 0.1674004110462994,
+  "r2": 0.04427561485795517,
+  "feature_importance": {
+    "growth_score": 574,
+    "stability_score": 518,
+    "learning_velocity": 520,
+    "github_activity": 550,
+    "skill_credibility": 500
+  }
+}

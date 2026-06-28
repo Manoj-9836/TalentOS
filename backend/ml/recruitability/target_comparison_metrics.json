@@ -1,0 +1,55 @@
+{
+  "offer_acceptance_rate_clean": {
+    "label": "offer_acceptance_rate (clean)",
+    "n_train": 32356,
+    "n_val": 8090,
+    "target_mean": 0.4745477921178855,
+    "target_std": 0.17744568025988605,
+    "mae": 0.15201535960979703,
+    "rmse": 0.17591081843451517,
+    "r2": 0.013880363936078277,
+    "feature_importance": {
+      "growth_score": 162,
+      "stability_score": 103,
+      "learning_velocity": 127,
+      "skill_credibility": 151,
+      "github_activity": 117
+    }
+  },
+  "recruiter_response_rate": {
+    "label": "recruiter_response_rate",
+    "n_train": 80000,
+    "n_val": 20000,
+    "target_mean": 0.4365736,
+    "target_std": 0.2141220779501326,
+    "mae": 0.18371013735889485,
+    "rmse": 0.2123794243905605,
+    "r2": 0.0133086430186391,
+    "feature_importance": {
+      "growth_score": 298,
+      "stability_score": 227,
+      "learning_velocity": 284,
+      "skill_credibility": 305,
+      "github_activity": 296
+    }
+  },
+  "interview_completion_rate": {
+    "label": "interview_completion_rate",
+    "n_train": 80000,
+    "n_val": 20000,
+    "target_mean": 0.6195099000000001,
+    "target_std": 0.17066154826331137,
+    "mae": 0.14454867070159724,
+    "rmse": 0.16742839924750383,
+    "r2": 0.04395600701057445,
+    "feature_importance": {
+      "growth_score": 545,
+      "stability_score": 487,
+      "learning_velocity": 527,
+      "skill_credibility": 462,
+      "github_activity": 549
+    }
+  },
+  "recommendation": "interview_completion_rate",
+  "notes": "All three models use the same 5 engineered features and the same train/val split (random_state=42, test_size=0.2). The two behavioural targets are trained on the full 100k cohort; offer_acceptance_rate is trained on the 40,446 rows with a recorded offer history (the remaining 59,554 are -1 sentinels)."
+}

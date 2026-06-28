@@ -1,0 +1,245 @@
+{
+  "info": {
+    "name": "TalentOS Pipeline API",
+    "description": "No-auth API surface for the TalentOS candidate ranking pipeline. Endpoints cover health, job upload, ranking, candidate intelligence, analytics, and comparison. Auth has been removed for Phase 5.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "talentos-phase5"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "job_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "candidate_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Jobs",
+      "item": [
+        {
+          "name": "Upload Job",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"job_description\": \"We are looking for a Senior Backend Engineer with 5+ years of experience in Python, FastAPI, PostgreSQL, and AWS. The ideal candidate will have experience building scalable microservices, designing REST APIs, and working with containerized deployments using Docker and Kubernetes. Strong problem-solving skills and experience with CI/CD pipelines are required.\",\n  \"job_title\": \"Senior Backend Engineer\",\n  \"company\": \"TechCorp\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/jobs",
+              "host": ["{{base_url}}"],
+              "path": ["api", "jobs"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const data = pm.response.json();",
+                  "  pm.collectionVariables.set('job_id', data.job_id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Jobs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/jobs", "host": ["{{base_url}}"], "path": ["api", "jobs"]}
+          }
+        },
+        {
+          "name": "Get Job",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/jobs/{{job_id}}", "host": ["{{base_url}}"], "path": ["api", "jobs", "{{job_id}}"]}
+          }
+        },
+        {
+          "name": "Job Stats Overview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/jobs/stats/overview", "host": ["{{base_url}}"], "path": ["api", "jobs", "stats", "overview"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ranking",
+      "item": [
+        {
+          "name": "Rank Candidates",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"job_id\": \"{{job_id}}\",\n  \"top_k\": 10,\n  \"weights\": {\n    \"semantic_score\": 0.35,\n    \"recruitability_score\": 0.25,\n    \"growth_score\": 0.15,\n    \"learning_velocity\": 0.10,\n    \"skill_credibility\": 0.10,\n    \"stability_score\": 0.05\n  }\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/rank", "host": ["{{base_url}}"], "path": ["api", "rank"]}
+          }
+        },
+        {
+          "name": "Rank Candidates for Job",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"job_id\": \"{{job_id}}\",\n  \"top_k\": 10\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/rankings/rank/{{job_id}}", "host": ["{{base_url}}"], "path": ["api", "rankings", "rank", "{{job_id}}"]}
+          }
+        },
+        {
+          "name": "Get Job Rankings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/rankings/job/{{job_id}}", "host": ["{{base_url}}"], "path": ["api", "rankings", "job", "{{job_id}}"]}
+          }
+        },
+        {
+          "name": "Ranking History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/rankings/history", "host": ["{{base_url}}"], "path": ["api", "rankings", "history"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Candidates",
+      "item": [
+        {
+          "name": "List Candidates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/candidates?limit=20&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["api", "candidates"],
+              "query": [
+                {"key": "limit", "value": "20"},
+                {"key": "offset", "value": "0"}
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.candidates && data.candidates.length > 0) {",
+                  "  pm.collectionVariables.set('candidate_id', data.candidates[0].candidate_id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Candidates Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/candidates/count", "host": ["{{base_url}}"], "path": ["api", "candidates", "count"]}
+          }
+        },
+        {
+          "name": "Candidate Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/candidates/{{candidate_id}}", "host": ["{{base_url}}"], "path": ["api", "candidates", "{{candidate_id}}"]}
+          }
+        },
+        {
+          "name": "Candidate Intelligence",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/candidates/{{candidate_id}}/intelligence", "host": ["{{base_url}}"], "path": ["api", "candidates", "{{candidate_id}}", "intelligence"]}
+          }
+        },
+        {
+          "name": "Candidate Explanation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/candidate/{{candidate_id}}", "host": ["{{base_url}}"], "path": ["api", "candidate", "{{candidate_id}}"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/api/analytics/dashboard", "host": ["{{base_url}}"], "path": ["api", "analytics", "dashboard"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Compare",
+      "item": [
+        {
+          "name": "Compare Two Candidates",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"candidate_a_id\": \"{{candidate_id}}\",\n  \"candidate_b_id\": \"{{candidate_id}}\"\n}"
+            },
+            "url": {"raw": "{{base_url}}/api/compare", "host": ["{{base_url}}"], "path": ["api", "compare"]}
+          }
+        }
+      ]
+    }
+  ]
+}

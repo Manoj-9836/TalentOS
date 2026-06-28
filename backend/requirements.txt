@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+pandas
+numpy
+pymongo
+sentence-transformers
+faiss-cpu
+lightgbm
+shap
+scikit-learn
+jupyter
+matplotlib
+seaborn
+python-dotenv
+python-jose[cryptography]
+passlib[bcrypt]
